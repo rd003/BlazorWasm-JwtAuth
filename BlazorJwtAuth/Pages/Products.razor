@@ -1,0 +1,15 @@
+﻿@page "/products"
+@attribute [Authorize(Roles ="Admin")]
+<h3>Products</h3>
+
+<AuthorizeView>
+    <Authorized>
+        Your products are here
+    </Authorized>
+    <NotAuthorized>
+        You are not authorized
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+
+}

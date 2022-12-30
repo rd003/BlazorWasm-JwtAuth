@@ -1,0 +1,45 @@
+﻿@page "/login"
+@using BlazorJwtAuth.Models;
+@inject IAuthenticationService _authService;
+@inject NavigationManager _navMgr;
+<h3>Login</h3>
+
+<div class="row my-2">
+    <div class="col-md-6">
+        <EditForm Model="@loginModel" OnValidSubmit="DoLogin">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label for="Username">Username</label>
+               <InputText class="form-control" @bind-Value="loginModel.Username"/>
+               <ValidationMessage For="@(()=>loginModel.Password)"/>
+            </div>
+
+            <div class="form-group">
+                <label for="Password">Password</label>
+                <InputText type="password" class="form-control" @bind-Value="loginModel.Password" />
+                <ValidationMessage For="@(()=>loginModel.Password)" />
+            </div>
+
+            <div class="my-2">
+              @loginResponse.Message
+            </div>
+
+            <div class="my-2">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+
+@code {
+    LoginDTO loginModel = new();
+    LoginResponse loginResponse = new();
+    async Task DoLogin()
+    {
+        loginResponse.Message = "Wait....";
+        loginResponse = await _authService.Login(loginModel);
+        if (loginResponse.StatusCode == 1)
+            _navMgr.NavigateTo("/dashboard");
+    }
+}
